@@ -1,15 +1,15 @@
 import { Action } from '@ngrx/store';
 
-export const hour =   'hour';
-export const second =  'second';
+export const HOUR =   'hour';
+export const SECOND =  'second';
 
 
 export class Hour implements Action {
-  readonly type = hour;
+  readonly type = HOUR;
 }
   
 export class Second implements Action {
-  readonly type = second;
+  readonly type = SECOND;
 }
 
 

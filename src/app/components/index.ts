@@ -18,6 +18,7 @@ import { SidenavComponent } from './sidenav';
 import { ToolbarComponent } from './toolbar';
 
 import { PipesModule } from '../pipes';
+import { ClockComponent } from "../components/clock";
 
 export const COMPONENTS = [
   BookAuthorsComponent,
@@ -31,7 +32,8 @@ export const COMPONENTS = [
   ToolbarComponent,
   PipeComponent,
   StateComponent,
-  StreamComponent
+  StreamComponent,
+  ClockComponent
 ];
 
 

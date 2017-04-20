@@ -24,9 +24,7 @@ export class StateComponent implements OnInit {
       Observable.interval(1000)
     ).startWith(new Date())
       .scan((acc, curr) => {
-        console.log('accumulator');
         const accDate = new Date(acc.toString());
-        console.log(accDate);
         const date: Date = new Date(accDate.getTime());
         
         date.setSeconds(date.getSeconds()+1);

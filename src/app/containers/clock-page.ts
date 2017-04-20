@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import '@ngrx/core/add/operator/select';
 import 'rxjs/add/operator/map';
 import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
@@ -7,9 +8,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as fromRoot from '../reducers';
 import * as book from '../actions/book';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { State } from '../reducers/index';
+import {HOUR, SECOND} from '../actions/clock';
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -22,32 +23,34 @@ import { State } from '../reducers/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-clock-page',
+  selector: 'bc-clock-page',  
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-        <button (click)="click$.next()">Update</button>
-    <h1>{{clock$ | async | date: 'fullDate'}} {{clock$ | async | date: 'mediumTime'}}</h1>
+      <input #inputNum type="number" value="0">
+      <button (click)="click$.next(inputNum.value)">Update</button>      
+      <clock [time]="time | async"></clock>
   `
 })
+/*This component takes care of things like streams and observables as well as showing the values asynchronously */
 export class ClockPageComponent implements OnDestroy {
-  actionsSubscription: Subscription;
-  clock$:any;
-  click$ = new Subject();
+  click$ = new Subject()
+            .map((value) => ({type: HOUR, payload: parseInt(value.toString())}));
+  seconds$ =  Observable
+            .interval(1000)
+            .map((value) => ({type: SECOND, payload:3}));
+  time: Observable<Date>;
+
+  getValidDate(date:Date){        
+    return new Date(date);
+  }            
 
   constructor(store: Store<State>) {
-    console.log('get Clock value:');    
-    this.clock$ = store.select(fromRoot.getClock);
-
-    //console.log(this.clock$);
+    this.time = store.select(fromRoot.getClock);
 
     Observable.merge(
-      this.click$.mapTo('hour'),
-      Observable.interval(1000).mapTo('second')
-    ).subscribe((type) => {
-      console.log('bringing type');
-      console.log(type);
-      store.dispatch({type});
-    }) 
+      this.click$,
+      this.seconds$,
+    ).subscribe(store.dispatch.bind(store)) 
   }
 
   ngOnDestroy() {

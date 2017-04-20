@@ -1,3 +1,4 @@
+import { compose } from '@ngrx/core/compose';
 import 'rxjs/add/operator/let';
 import { Observable } from 'rxjs/Observable';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
@@ -7,6 +8,7 @@ import * as fromRoot from '../reducers';
 import * as fromClock from '../reducers';
 import * as layout from '../actions/layout';
 import 'rxjs/add/observable/interval';
+import {ClockComponent} from '../components/clock';
 
 
 @Component({
@@ -27,7 +29,7 @@ import 'rxjs/add/observable/interval';
       </bc-toolbar>
 
       <router-outlet></router-outlet>
-      <h4>{{clock | async}}</h4>
+      <!--h4>{{clock | async}}</h4-->
       <!--bc-pipe></bc-pipe-->
       <!--bc-state></bc-state-->
       <!--bc-stream></bc-stream-->
@@ -45,7 +47,7 @@ export class AppComponent {
      * tree to the provided selector
      */
     this.showSidenav$ = this.store.select(fromRoot.getShowSidenav);    
-    this.clock.subscribe(console.log.bind(console));
+    //this.clock.subscribe(console.log.bind(console));
   }
 
   closeSidenav() {

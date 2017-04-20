@@ -1,4 +1,5 @@
 import * as clock from '../actions/clock';
+import { Action } from '@ngrx/store';
 
 export interface State {
     date: Date;
@@ -8,30 +9,15 @@ const initialState: State = {
   date: new Date(),
 };
 
-export function reducer(state = initialState , action: clock.Actions): State{
-    
-    if (Object.prototype.toString.call(state) === '[object Date]'){
-        console.log(state);        
-    }
-   /* else{
-        console.log('needs to be converted');
-        const ob:any = state;
-        console.log(ob);
-        state = ob.clock;
-    }*/
-
-    console.log('================='); 
-    console.log('accumulator----->');
-    console.log(state);   
-    console.log('================='); 
+export function reducer(state = initialState , {type, payload} : Action): State{
     const newDate = new Date(state.date.getTime());
 
-    switch(action.type){
-        case 'second':
-            newDate.setSeconds(newDate.getSeconds() +1);
+    switch(type){
+        case clock.SECOND:
+            newDate.setSeconds(newDate.getSeconds() + payload);
             return {date: newDate };
-        case 'hour':
-            newDate.setHours(newDate.getHours()+1);
+        case clock.HOUR:
+            newDate.setHours(newDate.getHours() + payload);
             return {date: newDate };
     }
     

@@ -26,9 +26,7 @@ export class StreamComponent implements OnInit {
       Observable.interval(1000).mapTo('second')
     ).startWith((new Date()).toString())
       .scan((acc, curr) => {
-        console.log('accumulator');
         const accDate = new Date(acc);
-        console.log(accDate);
         const date= new Date(accDate.getTime());
         
         if(curr === 'second'){
