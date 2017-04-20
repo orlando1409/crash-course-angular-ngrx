@@ -43,6 +43,7 @@ import * as fromBooks from './books';
 import * as fromCollection from './collection';
 import * as fromLayout from './layout';
 import * as fromClock from './clock';
+import * as fromPeople from './people';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -55,6 +56,7 @@ export interface State {
   layout: fromLayout.State;
   router: fromRouter.RouterState;
   clock: fromClock.State;
+  people: fromPeople.State;
 }
 
 
@@ -71,7 +73,8 @@ const reducers = {
   collection: fromCollection.reducer,
   layout: fromLayout.reducer,
   router: fromRouter.routerReducer,
-  clock: fromClock.reducer
+  clock: fromClock.reducer,
+  people: fromPeople.reducer,
 };
 
 const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers);
@@ -161,11 +164,17 @@ export const getLayoutState = (state: State) => state.layout;
 
 export const getShowSidenav = createSelector(getLayoutState, fromLayout.getShowSidenav);
 
-
-export const getClockState = (state: State) => state.clock; /*{
-  console.log('inside getClockState');
-  console.log(state.clock);
-  return state.clock;
-};*/
+/**
+ * Clock Reducers
+ */
+export const getClockState = (state: State) => state.clock; 
 
 export const getClock = createSelector(getClockState, fromClock.getDate);
+
+
+/**
+ * People Reducers
+ */
+export const getPeopleState = (state: State) => state.people; 
+
+export const getPeople = createSelector(getPeopleState, fromPeople.getPeople);

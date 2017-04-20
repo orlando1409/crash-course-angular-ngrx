@@ -1,5 +1,6 @@
 import * as clock from '../actions/clock';
 import { Action } from '@ngrx/store';
+import { SECOND, HOUR } from "../actions/clock";
 
 export interface State {
     date: Date;
@@ -10,18 +11,20 @@ const initialState: State = {
 };
 
 export function reducer(state = initialState , {type, payload} : Action): State{
+    console.log('called clock reducer, the sate is:');
+    console.log(state);
     const newDate = new Date(state.date.getTime());
 
     switch(type){
-        case clock.SECOND:
+        case SECOND:
             newDate.setSeconds(newDate.getSeconds() + payload);
             return {date: newDate };
-        case clock.HOUR:
+        case HOUR:
             newDate.setHours(newDate.getHours() + payload);
             return {date: newDate };
+        default:
+            return state;
     }
-    
-    return state;
 } 
 
-export const getDate = (state: State) => state.date;
+export const getDate = (state = initialState) => state.date;

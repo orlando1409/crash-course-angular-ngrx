@@ -11,6 +11,9 @@ import * as book from '../actions/book';
 import { Subject } from 'rxjs/Subject';
 import { State } from '../reducers/index';
 import {HOUR, SECOND} from '../actions/clock';
+import {ADVANCE} from '../actions/people';
+import * as fromPeople from '../reducers/people';
+
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -29,27 +32,35 @@ import {HOUR, SECOND} from '../actions/clock';
       <input #inputNum type="number" value="0">
       <button (click)="click$.next(inputNum.value)">Update</button>      
       <clock [time]="time | async"></clock>
+      <div (click)="person$.next(person)" *ngFor="let person of people | async">
+        {{person.name}} is in {{person.time | date: 'jms'}}
+      </div>
   `
 })
 /*This component takes care of things like streams and observables as well as showing the values asynchronously */
 export class ClockPageComponent implements OnDestroy {
   click$ = new Subject()
             .map((value) => ({type: HOUR, payload: parseInt(value.toString())}));
+  person$ = new Subject()
+            .map((value)=>{
+              console.log('click on person');              
+              return ({payload: value, type: ADVANCE})}
+            );
+
   seconds$ =  Observable
             .interval(1000)
-            .map((value) => ({type: SECOND, payload:3}));
+            .map((value) => ({type: SECOND, payload:1}));
   time: Observable<Date>;
-
-  getValidDate(date:Date){        
-    return new Date(date);
-  }            
+  people: Observable<Array<any>>;
 
   constructor(store: Store<State>) {
     this.time = store.select(fromRoot.getClock);
+    this.people = store.select(fromRoot.getPeople);
 
     Observable.merge(
       this.click$,
       this.seconds$,
+      this.person$
     ).subscribe(store.dispatch.bind(store)) 
   }
 
