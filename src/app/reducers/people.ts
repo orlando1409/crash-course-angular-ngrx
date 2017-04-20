@@ -1,7 +1,10 @@
-import { ADVANCE } from './../actions/people';
-import { Action } from '@ngrx/store';
-import * as clock from './clock';
 import 'rxjs/add/operator/map';
+
+import * as clock from './clock';
+
+import { ADVANCE, RECALL } from './../actions/people';
+
+import { Action } from '@ngrx/store';
 import { HOUR } from "./../actions/clock";
 
 export interface State {
@@ -17,9 +20,8 @@ const initialState: State = {
 };
 
 export function reducer(state = initialState, {type, payload} = {type: "", payload: ""}): State{
-    switch(type){
-        case ADVANCE:
-            console.log('calling people reducer');            
+    switch(type){        
+        case ADVANCE:                       
             return {    people: state.people.map((person)=>{
                                 if (payload === person){
                                     return {
@@ -29,12 +31,16 @@ export function reducer(state = initialState, {type, payload} = {type: "", paylo
                                 }
                                 return person;                    
             })}
+        case RECALL:
+            console.log('recall call reached');
+            return {    people: state.people.map((person) =>{
+                            return {    
+                                name: person.name,
+                                time: payload
+            }})}               
         default:
             return initialState;
     }    
 } 
 
-export const getPeople = (state = initialState) =>{ 
-    console.log('calling getPeople from reducer');    
-    return state.people;
-};
+export const getPeople = (state = initialState) => state.people;

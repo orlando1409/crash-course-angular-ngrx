@@ -11,8 +11,6 @@ const initialState: State = {
 };
 
 export function reducer(state = initialState , {type, payload} : Action): State{
-    console.log('called clock reducer, the sate is:');
-    console.log(state);
     const newDate = new Date(state.date.getTime());
 
     switch(type){
